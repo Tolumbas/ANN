@@ -9,20 +9,9 @@ module.exports = class Layer{
 		}
 	}
 	pass(){
-		if (arguments.length != this.neurons.length){
-			throw `ERROR: Unexpected input. 
-			Expected ${this.neurons.length} inputs, got ${arguments.length}`;
+		for (var a =0; a<this.neurons.length;a++){
+			this.neurons[a].pass(arguments[0]);
 		}
-		for (var a =0; a<arguments.length;a++){
-			try{
-				var test = this.neurons[a].value = arguments[a];
-			}
-			catch(e){
-				console.log(e,arguments);
-			}
-		}
-		this.update();
-		
 	}
 	get value(){
 		if (this.neurons.length == 1){
@@ -32,24 +21,33 @@ module.exports = class Layer{
 			throw `ERROR: Layer has more than one neuron: ${this.neurons.length}`;
 		}
 	}
+	get length(){
+		return this.neurons.length;
+	}
+	try(){
+		var states = [];
+		for (var a =0;a<this.neurons.length;a++){
+			var neuronStates = this.neurons[a].try();
+			for (var b = 0;b<neuronStates.length;b++){
+				var trying = {neuronState:neuronStates[b], index:a};
+				states.push(trying);
+			}
+		}
+		return states;
+	}
+	setState(state){
+		this.neurons[state.index].setState(state.neuronState);
+	}
 	connect(anotherLayer){
 		for(var a=0;a<this.neurons.length;a++){
 			for (var b=0;b<anotherLayer.neurons.length;b++){
-				try{
-					this.neurons[a].connect(anotherLayer.neurons[b]);
-				}
-				catch(e){
-					console.log(e,'\n',this.neurons[a],'\n',anotherLayer.neurons[b]);
-				}
+				this.neurons[a].connect(anotherLayer.neurons[b]);
 			}
 		}
 	}
 	update(){
 		for (var a of this.neurons){
-			a.update(true);
+			a.update();
 		}
-	}
-	expect(){
-
 	}
 }

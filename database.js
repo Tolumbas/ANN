@@ -1,19 +1,20 @@
 function createPoint(diameter,offsetX,offsetY){
 	var angle = Math.random()*2*Math.PI;
 	var distance = Math.random()*diameter-diameter/2;
-	return {
-		x:offsetX+Math.cos(angle)*distance,
-		y:offsetY+Math.sin(angle)*distance
-	}
+	return [
+		offsetX+Math.cos(angle)*distance,
+		offsetY+Math.sin(angle)*distance
+	]
 }
 
 var trainingData = [];
 var testingData = [];
-for (var a =0;a<100;a++){
-	var p1 = createPoint(5,-20,-20);
-	p1.type= 1;
-	var p2 = createPoint(5, 20, 20);
-	p2.type= -1;
+for (var a =0;a<1000;a++){
+	var p1 = {},p2 = {};
+	p1.input = createPoint(30,-10,-10);
+	p1.output = 1;
+	p2.input = createPoint(30, 10, 10);
+	p2.output = -1;
 	if (a<20){
 		trainingData.push(p1);
 		trainingData.push(p2);
